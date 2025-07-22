@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog" logicalFilePath="db/changelog/changes/changelog.init.schema.xml"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="1" author="lobanov anton">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="links"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="links">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="short_code" type="varchar(10)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="long_url" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expires_at" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="idx_short_code" tableName="links">
+            <column name="short_code"/>
+        </createIndex>
+
+        <createIndex indexName="idx_expires_at" tableName="links">
+            <column name="expires_at"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
